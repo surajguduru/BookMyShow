@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
+const adminMiddleware = require("../middlewares/adminMiddleware");
+const partnerMiddleware = require("../middlewares/partnerMiddleware");
 const EmailHelper = require("../utils/emailSender");
 
 const router = express.Router();
@@ -192,8 +194,20 @@ router.patch("/resetpassword", async function (req, res) {
       status: "failure"
     })
   }
-
-
 })
 
+
+router.get("/admin", authMiddleware, adminMiddleware, async (req, res) => {
+  res.send({
+    success: true,
+    message: "You are an admin!",
+  });
+});
+
+router.get("/partner", authMiddleware, partnerMiddleware, async (req, res) => {
+  res.send({
+    success: true,
+    message: "You are a partner!",
+  });
+});
 module.exports = router;

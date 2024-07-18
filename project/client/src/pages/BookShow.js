@@ -45,67 +45,71 @@ const BookShow = () => {
             Screen this side, you will be watching in this direction
           </p>
           <div className="screen-div"></div>
+          <br />
+          <ul className="seat-ul justify-content-center">
+            {Array.from(Array(rows).keys()).map((row) => {
+              return Array.from(Array(columns).keys()).map((column) => {
+                let seatNumber = row * columns + column + 1;
+
+                // Calculation for the first iteration
+                // 0*12 + 0+1 = 1
+                // 0*12 + 1+1 = 2
+                // 0*12 + 2+1 = 3
+                // So on up till 12th seat
+
+                // Calculation for the second iteration
+                // 1*12 + 0+1 = 13
+                // 1*12 + 1+1 = 14
+                // 1*12 + 2+1 = 15
+                // So on up till 24th seat
+
+                // Calculation for the third iteration
+                // 2*12 + 0+1 = 25
+                // 2*12 + 1+1 = 26
+                // 2*12 + 2+1 = 27
+                // So on up till 36th seat
+
+                // So on...
+
+                // this part
+
+                let seatClass = "seat-btn";
+
+                if (selectedSeats.includes(seatNumber)) {
+                  seatClass += " selected";
+                }
+                if (show.bookedSeats.includes(seatNumber)) {
+                  seatClass += " booked";
+                }
+
+                if (seatNumber <= totalSeats)
+                  return (
+                    <li>
+                      <button
+                        onClick={() => {
+                          if (!show.bookedSeats.includes(seatNumber)) {
+                            if (selectedSeats.includes(seatNumber)) {
+                              setSelectedSeats(
+                                selectedSeats.filter(
+                                  (curSeatNumber) => curSeatNumber !== seatNumber
+                                )
+                              );
+                            } else {
+                              setSelectedSeats([...selectedSeats, seatNumber]);
+                            }
+                          }
+                        }}
+                        className={seatClass}
+                      >
+                        {seatNumber}
+                      </button>
+                    </li>
+                  );
+              });
+            })}
+          </ul>
         </div>
-        <ul className="seat-ul justify-content-center">
-          {Array.from(Array(rows).keys()).map((row) => {
-            return Array.from(Array(columns).keys()).map((column) => {
-              let seatNumber = row * columns + column + 1;
 
-              // Calculation for the first iteration
-              // 0*12 + 0+1 = 1
-              // 0*12 + 1+1 = 2
-              // 0*12 + 2+1 = 3
-              // So on up till 12th seat
-
-              // Calculation for the second iteration
-              // 1*12 + 0+1 = 13
-              // 1*12 + 1+1 = 14
-              // 1*12 + 2+1 = 15
-              // So on up till 24th seat
-
-              // Calculation for the third iteration
-              // 2*12 + 0+1 = 25
-              // 2*12 + 1+1 = 26
-              // 2*12 + 2+1 = 27
-              // So on up till 36th seat
-
-              // So on...
-
-              // this part
-
-              let seatClass = "seat-btn";
-
-              if (selectedSeats.includes(seatNumber)) {
-                seatClass += " selected";
-              }
-              if (show.bookedSeats.includes(seatNumber)) {
-                seatClass += " booked";
-              }
-
-              if (seatNumber <= totalSeats)
-                return (
-                  <li>
-                    <button
-                      onClick={() => {
-                        if (selectedSeats.includes(seatNumber)) {
-                          setSelectedSeats(
-                            selectedSeats.filter(
-                              (curSeatNumber) => curSeatNumber !== seatNumber
-                            )
-                          );
-                        } else {
-                          setSelectedSeats([...selectedSeats, seatNumber]);
-                        }
-                      }}
-                      className={seatClass}
-                    >
-                      {seatNumber}
-                    </button>
-                  </li>
-                );
-            });
-          })}
-        </ul>
 
         <div className="d-flex bottom-card justify-content-between w-100 max-width-600 mx-auto mb-25px mt-3">
           <div className="flex-1">
@@ -152,7 +156,7 @@ const BookShow = () => {
       if (response.success) {
         message.success(response.message);
         book(response.data);
-         console.log(response);
+        console.log(response);
       } else {
         message.error(response.message);
       }
@@ -211,9 +215,9 @@ const BookShow = () => {
               {selectedSeats.length > 0 && (
                 <StripeCheckout
                   token={onToken}
-                  amount={selectedSeats.length * show.ticketPrice*100}
-            
-        
+                  amount={selectedSeats.length * show.ticketPrice * 100}
+
+
                   stripeKey="pk_test_51JKPQWSJULHQ0FL7VOkMrOMFh0AHMoCFit29EgNlVRSvFkDxSoIuY771mqGczvd6bdTHU1EkhJpojOflzoIFGmj300Uj4ALqXa"
                 >
                   {/* Use this one in some situation=> pk_test_eTH82XLklCU1LJBkr2cSDiGL001Bew71X8  */}
